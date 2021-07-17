@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button bAnlz;
     private ClipboardManager clipboardManager;
     private ClipData clipData;
-    private TextView res;
+    String resultData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         bClr = (Button)findViewById(R.id.bClear);
         ptxt = (EditText)findViewById(R.id.txtShow);
         btnpst = (Button)findViewById(R.id.btnShow);
-        res = (TextView)findViewById(R.id.res);
         clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
 
         ClipData pData = clipboardManager.getPrimaryClip();
@@ -101,46 +100,18 @@ public class MainActivity extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, postData, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                res.setText(response.toString());
-                System.out.println(response);
+//                res.setText(response.toString());
+                resultData = response.toString();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                res.setText(error.toString());
+                resultData = error.toString();
             }
         });
-
         requestQueue.add(jsonObjectRequest);
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                res.setText(response);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                res.setText(error.toString());
-//            }
-//        }){
-//            @Override
-//            protected Map<String, String> getParams(){
-//                String content = new String();
-//                content = ptxt.getText().toString();
-//                Map<String,String> params = new HashMap<String, String>();
-//                params.put("text", content);
-//                return params;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String,String> params = new HashMap<String, String>();
-//                params.put("Content-Type","application/json");
-//                return params;
-//            }
-//        };
-//        requestQueue.add(stringRequest);
-//        Intent intent = new Intent(this, AnalyseActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, AnalyseActivity.class);
+        intent.putExtra("result",resultData);
+        startActivity(intent);
     }
 }
