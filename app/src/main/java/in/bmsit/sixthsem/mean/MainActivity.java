@@ -1,5 +1,6 @@
 package in.bmsit.sixthsem.mean;
 
+import android.app.VoiceInteractor;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -8,9 +9,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private EditText ptxt;
@@ -19,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button bAnlz;
     private ClipboardManager clipboardManager;
     private ClipData clipData;
+    String resultData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openAnalyseActivity();
+//                res.setText("response");
             }
         });
 
@@ -63,8 +82,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public void openAnalyseActivity(){
+        String url = "https://mean-senti.herokuapp.com/predict";
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+
+        JSONObject postData = new JSONObject();
+        try {
+            String content = new String();
+            content = ptxt.getText().toString();
+            postData.put("text", content);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, postData, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+//                res.setText(response.toString());
+                resultData = response.toString();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                resultData = error.toString();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
         Intent intent = new Intent(this, AnalyseActivity.class);
+        intent.putExtra("result",resultData);
         startActivity(intent);
     }
 }
