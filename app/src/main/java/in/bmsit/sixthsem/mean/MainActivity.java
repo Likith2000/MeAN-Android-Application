@@ -1,11 +1,15 @@
 package in.bmsit.sixthsem.mean;
 
+import android.app.ProgressDialog;
 import android.app.VoiceInteractor;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +30,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
     private Button bAnlz;
     private ClipboardManager clipboardManager;
     private ClipData clipData;
-    String resultData;
+    TextView res1;
+    ProgressDialog p;
+    String resultData = null;
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +57,7 @@ public class MainActivity extends AppCompatActivity {
         ptxt = (EditText)findViewById(R.id.txtShow);
         btnpst = (Button)findViewById(R.id.btnShow);
         clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
-
-        ClipData pData = clipboardManager.getPrimaryClip();
-        ClipData.Item item = pData.getItemAt(0);
-        String txtpaste = item.getText().toString();
-        ptxt.setText(txtpaste);
-        Toast.makeText(getApplicationContext(),"Data Pasted from Clipboard",Toast.LENGTH_SHORT).show();
+        res1 = findViewById(R.id.res1);
 
         btnpst.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +73,10 @@ public class MainActivity extends AppCompatActivity {
         bAnlz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAnalyseActivity();
-//                res.setText("response");
+                AsyncTaskAnalyze asyncTask=new AsyncTaskAnalyze();
+                asyncTask.execute("https://mean-senti.herokuapp.com/predict");
             }
         });
-
 
         bClr.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,35 +86,69 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void openAnalyseActivity(){
-        String url = "https://mean-senti.herokuapp.com/predict";
-        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
-        JSONObject postData = new JSONObject();
-        try {
-            String content = new String();
-            content = ptxt.getText().toString();
-            postData.put("text", content);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private class AsyncTaskAnalyze extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            p = new ProgressDialog(MainActivity.this);
+            p.setMessage("Please wait...");
+            p.setIndeterminate(false);
+            p.setCancelable(false);
+            p.show();
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, postData, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-//                res.setText(response.toString());
-                resultData = response.toString();
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                String url = new String(strings[0]);
+                RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+                JSONObject postData = new JSONObject();
+                try {
+                    String content = new String();
+                    content = ptxt.getText().toString();
+                    postData.put("text", content);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, postData, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        resultData = response.toString();
+                        Log.d("Response","Received");
+                        count--;
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        resultData = error.toString();
+                    }
+                });
+                requestQueue.add(jsonObjectRequest);
+                count++;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                resultData = error.toString();
+            while(count !=0 ){
+                Log.d("Waiting","Waiting");
             }
-        });
-        requestQueue.add(jsonObjectRequest);
-        Intent intent = new Intent(this, AnalyseActivity.class);
-        intent.putExtra("result",resultData);
-        startActivity(intent);
+            return resultData;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.d("Act","Done");
+            if(resultData != null){
+                p.hide();
+                res1.setText(result);
+//                Intent intent = new Intent(this, AnalyseActivity.class);
+//                intent.putExtra("result",resultData);
+//                startActivity(intent);
+            } else{
+                p.show();
+            }
+        }
     }
 }
