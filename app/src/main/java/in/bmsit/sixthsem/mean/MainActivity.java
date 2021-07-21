@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         ptxt = (EditText)findViewById(R.id.txtShow);
         btnpst = (Button)findViewById(R.id.btnShow);
         clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
-        res1 = findViewById(R.id.res1);
 
         btnpst.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,10 +141,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Act","Done");
             if(resultData != null){
                 p.hide();
-                res1.setText(result);
-//                Intent intent = new Intent(this, AnalyseActivity.class);
-//                intent.putExtra("result",resultData);
-//                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, AnalyseActivity.class);
+                intent.putExtra("result",resultData);
+                startActivity(intent);
             } else{
                 p.show();
             }
