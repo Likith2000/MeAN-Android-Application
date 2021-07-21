@@ -34,7 +34,7 @@ public class AnalyseActivity extends AppCompatActivity {
     {
         AnimatedPieView mAnimatedPieView = findViewById(R.id.pie);
         AnimatedPieViewConfig config = new AnimatedPieViewConfig();
-        for(int i=0; i<=7; i+=2) {
+        for(int i=0; i<=data.length; i+=2) {
             config.startAngle(-90)
                     .addData(new SimplePieInfo(Integer.parseInt(data[i+1]), Color.parseColor(color[i%5]), data[i]))
                     .drawText(true).duration(2000).textSize(30);
