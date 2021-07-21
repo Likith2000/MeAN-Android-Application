@@ -4,14 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2ed573"
+    android:background="#ecf0f1"
     tools:context=".AnalyseActivity">
+
+    <com.razerdp.widget.animatedpieview.AnimatedPieView
+        android:id="@+id/pie"
+        android:layout_width="363dp"
+        android:layout_height="286dp"
+        android:layout_marginBottom="140dp"
+        android:fontFamily="@font/fontdemi"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.356" />
 
     <TextView
         android:id="@+id/res"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Analyse"
+        android:text=""
         android:textSize="15pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,11 +36,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Result"
+        android:fontFamily="@font/fontdemi"
         android:textSize="15pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.168" />
+        app:layout_constraintVertical_bias="0.119" />
 </androidx.constraintlayout.widget.ConstraintLayout>

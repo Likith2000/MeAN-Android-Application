@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         bAnlz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeKeyboard();
                 AsyncTaskAnalyze asyncTask=new AsyncTaskAnalyze();
                 asyncTask.execute("https://mean-senti.herokuapp.com/predict");
             }
@@ -147,6 +149,15 @@ public class MainActivity extends AppCompatActivity {
             } else{
                 p.show();
             }
+        }
+    }
+    private void closeKeyboard()
+    {
+        View view = this.getCurrentFocus();
+        if(view!=null)
+        {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }
