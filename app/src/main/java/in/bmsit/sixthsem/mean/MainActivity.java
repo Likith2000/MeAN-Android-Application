@@ -37,14 +37,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText ptxt;
-    private Button btnpst;
-    private Button bClr;
-    private Button bAnlz;
-    private ClipboardManager clipboardManager;
-    private ClipData clipData;
-    TextView res1;
-    ProgressDialog p;
+    EditText ptxt;
+    Button btnpst, bClr, bAnlz;
+    ClipboardManager clipboardManager;
+    ProgressDialog p,p1;
     String resultData = null;
     int count = 0;
 
@@ -53,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bAnlz = (Button)findViewById(R.id.bAnalyse);
-        bClr = (Button)findViewById(R.id.bClear);
-        ptxt = (EditText)findViewById(R.id.txtShow);
-        btnpst = (Button)findViewById(R.id.btnShow);
+        bAnlz = findViewById(R.id.bAnalyse);
+        bClr = findViewById(R.id.bClear);
+        ptxt = findViewById(R.id.txtShow);
+        btnpst = findViewById(R.id.btnShow);
         clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
 
         btnpst.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         resultData = response.toString();
-                        Log.d("Response","Received");
                         count--;
                     }
                 }, new Response.ErrorListener() {
@@ -132,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             while(count !=0 ){
-                Log.d("Waiting","Waiting");
+//                Wait
             }
             return resultData;
         }
@@ -140,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Log.d("Act","Done");
             if(resultData != null){
                 p.hide();
                 Intent intent = new Intent(MainActivity.this, AnalyseActivity.class);

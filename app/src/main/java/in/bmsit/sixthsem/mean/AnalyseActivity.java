@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.razerdp.widget.animatedpieview.AnimatedPieView;
@@ -15,7 +16,6 @@ public class AnalyseActivity extends AppCompatActivity {
     TextView res;
     String[] data;
     String s1,s2,s3,s4;
-    String[] color = {"#dc143c", "#2ec571", "#8c7ae6", "#e84118", "#009432", "#487eb0", "#22a6b3", "#130f40"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         result = getIntent().getStringExtra("result");
@@ -34,12 +34,19 @@ public class AnalyseActivity extends AppCompatActivity {
     {
         AnimatedPieView mAnimatedPieView = findViewById(R.id.pie);
         AnimatedPieViewConfig config = new AnimatedPieViewConfig();
-        for(int i=0; i<=data.length; i+=2) {
+        for(int i=0; i<data.length; i+=2) {
             config.startAngle(-90)
-                    .addData(new SimplePieInfo(Integer.parseInt(data[i+1]), Color.parseColor(color[i%5]), data[i]))
+                    .addData(new SimplePieInfo(Integer.parseInt(data[i+1]), randomColor(), data[i]))
                     .drawText(true).duration(2000).textSize(30);
         }
         mAnimatedPieView.applyConfig(config);
         mAnimatedPieView.start();
+    }
+
+    public int randomColor() {
+        int r = (int) (0xff * Math.random());
+        int g = (int) (0xff * Math.random());
+        int b = (int) (0xff * Math.random());
+        return Color.rgb(r, g, b);
     }
 }
