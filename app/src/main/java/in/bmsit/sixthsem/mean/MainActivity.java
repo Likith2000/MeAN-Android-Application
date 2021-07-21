@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ClipboardManager clipboardManager;
     private ClipData clipData;
     String resultData;
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         bClr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
 //                res.setText(response.toString());
                 resultData = response.toString();
+                count=0;
             }
         }, new Response.ErrorListener() {
             @Override
@@ -110,8 +112,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonObjectRequest);
-        Intent intent = new Intent(this, AnalyseActivity.class);
-        intent.putExtra("result",resultData);
-        startActivity(intent);
+        count+=1;
+        while(count!=0){
+            try{
+                Thread.sleep(3000);
+                Log.d("Sleeping","Sleeping");
+                Log.d("count", String.valueOf(count));
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+            Log.d("Act","Started");
+            Intent intent = new Intent(this, AnalyseActivity.class);
+            intent.putExtra("result",resultData);
+            startActivity(intent);
+
+
     }
 }
