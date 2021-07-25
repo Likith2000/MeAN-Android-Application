@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             p = new ProgressDialog(MainActivity.this);
-            p.setMessage("Please wait...");
+            p.setMessage("Please Wait...");
             p.setIndeterminate(false);
             p.setCancelable(false);
             p.show();
