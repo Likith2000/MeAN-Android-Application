@@ -39,5 +39,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.github.razerdp:AnimatedPieView:1.2.3'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
 }
