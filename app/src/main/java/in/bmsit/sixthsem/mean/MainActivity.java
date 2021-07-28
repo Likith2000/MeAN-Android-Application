@@ -115,19 +115,14 @@ public class MainActivity extends AppCompatActivity {
                         resultData = response.toString();
                         count--;
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        resultData = error.toString();
-                    }
-                });
+                }, error -> resultData = error.toString());
                 requestQueue.add(jsonObjectRequest);
                 count++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
             while(count !=0 ){
-//                Wait
+                Log.d("Waiting","waiting");
             }
             return resultData;
         }
@@ -139,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 p.hide();
                 Intent intent = new Intent(MainActivity.this, AnalyseActivity.class);
                 intent.putExtra("result",resultData);
+                resultData = null;
                 startActivity(intent);
             } else{
                 p.show();
