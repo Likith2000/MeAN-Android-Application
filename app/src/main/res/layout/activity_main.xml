@@ -15,7 +15,7 @@
         android:fontFamily="@font/fontdemi"
         android:text="Message Analyser"
         android:textColor="#FFE07D"
-        android:textSize="15pt"
+        android:textSize="12pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
