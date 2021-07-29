@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();//hide action bar
         bAnlz = findViewById(R.id.bAnalyse);
         bClr = findViewById(R.id.bClear);
         ptxt = findViewById(R.id.txtShow);

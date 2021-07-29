@@ -20,6 +20,7 @@ public class AnalyseActivity extends AppCompatActivity {
         result = getIntent().getStringExtra("result");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analyse);
+        getSupportActionBar().hide();//hide action bar
         res = findViewById(R.id.res);
         s1 = result.replace('"', ' ');
         s2 = s1.replace("{", "");
