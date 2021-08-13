@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();//hide action bar
         bAnlz = findViewById(R.id.bAnalyse);
         bClr = findViewById(R.id.bClear);
         ptxt = findViewById(R.id.txtShow);
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             p = new ProgressDialog(MainActivity.this);
-            p.setMessage("Please wait...");
+            p.setMessage("Please Wait...");
             p.setIndeterminate(false);
             p.setCancelable(false);
             p.show();
@@ -115,19 +116,14 @@ public class MainActivity extends AppCompatActivity {
                         resultData = response.toString();
                         count--;
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        resultData = error.toString();
-                    }
-                });
+                }, error -> resultData = error.toString());
                 requestQueue.add(jsonObjectRequest);
                 count++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
             while(count !=0 ){
-//                Wait
+                Log.d("Waiting","waiting");
             }
             return resultData;
         }
@@ -139,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 p.hide();
                 Intent intent = new Intent(MainActivity.this, AnalyseActivity.class);
                 intent.putExtra("result",resultData);
+                resultData = null;
                 startActivity(intent);
             } else{
                 p.show();

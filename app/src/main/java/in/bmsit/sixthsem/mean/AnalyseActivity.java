@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.razerdp.widget.animatedpieview.AnimatedPieView;
@@ -21,6 +20,7 @@ public class AnalyseActivity extends AppCompatActivity {
         result = getIntent().getStringExtra("result");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analyse);
+        getSupportActionBar().hide();//hide action bar
         res = findViewById(R.id.res);
         s1 = result.replace('"', ' ');
         s2 = s1.replace("{", "");
